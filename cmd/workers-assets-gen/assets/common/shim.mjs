@@ -64,3 +64,9 @@ export async function onRequest(ctx) {
   await run(createRuntimeContext(env, ctx, binding));
   return binding.handleRequest(request);
 }
+
+export async function queue(batch, env, ctx) {
+  const binding = {};
+  await run(createRuntimeContext(env, ctx, binding));
+  return binding.handleQueueMessageBatch(batch);
+}

@@ -20,9 +20,11 @@ func handleErr(w http.ResponseWriter, msg string, err error) {
 }
 
 func main() {
+	queues.ConsumeNonBlocking(consumeBatch)
 	http.HandleFunc("/", handleProduce)
 	workers.Serve(nil)
 }
+
 func handleProduce(w http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/" {
 		w.WriteHeader(http.StatusNotFound)
@@ -101,5 +103,14 @@ func produceBytes(q *queues.Producer, req *http.Request) error {
 		return fmt.Errorf("failed to send message: %w", err)
 	}
 
+	return nil
+}
+
+func consumeBatch(batch *queues.ConsumerMessageBatch) error {
+	for _, msg := range batch.Messages {
+		log.Printf("Received message: %v\n", msg.Body.Get("name").String())
+	}
+
+	batch.AckAll()
 	return nil
 }

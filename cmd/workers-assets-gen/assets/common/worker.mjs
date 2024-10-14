@@ -3,4 +3,4 @@ import mod from "./app.wasm";
 
 imports.init(mod);
 
-export default { fetch: imports.fetch, scheduled: imports.scheduled }
+export default { fetch: imports.fetch, scheduled: imports.scheduled, queue: imports.queue };
