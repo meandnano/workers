@@ -7,6 +7,11 @@ import (
 	"github.com/syumai/workers/internal/jsutil"
 )
 
+// Consumer is a function that received a batch of messages from Cloudflare Queues.
+// The function should be set using Consume or ConsumeNonBlocking.
+// A returned error will cause the batch to be retried (unless the batch or individual messages are acked).
+// NOTE: to do long-running message processing task within the Consumer, use cloudflare.WaitUntil, this will postpone the message
+// acknowledgment until the task is completed witout blocking the queue consumption.
 type Consumer func(batch *ConsumerMessageBatch) error
 
 var consumer Consumer
